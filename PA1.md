@@ -231,34 +231,16 @@ str(d_clean2)
 # use reshape lib to calculate the grouped average
 #install.packages("reshape")
 library(reshape)
-d_clean4 <- cast(melt(d_clean2,id=c("weekendfactor","interval")),weekendfactor~interval,mean)
+d_clean3 <- cast(melt(d_clean2,id=c("weekendfactor","interval")),weekendfactor~interval,mean)
 dim(d_clean3)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'd_clean3' not found
+## [1]   2 289
 ```
 
 ```r
 head(d_clean3)
-```
-
-```
-## Error in head(d_clean3): object 'd_clean3' not found
-```
-
-```r
-d_clean4 <-data.frame(weekendf=as.factor(c(rep("weekday",288),rep("weekend",288))),
-                     intervalf=rep(names(step_per_interval),2),
-                     steps=as.numeric(cbind(d_clean3[1,2:289],d_clean3[2,2:289])))
-```
-
-```
-## Error in cbind(d_clean3[1, 2:289], d_clean3[2, 2:289]): object 'd_clean3' not found
-```
-
-```r
-head(d_clean4)
 ```
 
 ```
@@ -373,10 +355,25 @@ head(d_clean4)
 ```
 
 ```r
-xyplot(steps ~ intervalf|weekendf,data=d_clean4)
+d_clean4 <-data.frame(weekendf=as.factor(c(rep("weekday",288),rep("weekend",288))),
+                     intervalf=as.numeric(rep(names(step_per_interval),2)),
+                     steps=as.numeric(cbind(d_clean3[1,2:289],d_clean3[2,2:289])))
+head(d_clean4)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'weekendf' not found
+##   weekendf intervalf    steps
+## 1  weekday         0 7823.126
+## 2  weekday         5 7822.223
+## 3  weekday        10 7822.087
+## 4  weekday        15 7822.099
+## 5  weekday        20 7822.049
+## 6  weekday        25 7822.795
 ```
+
+```r
+xyplot(steps ~ intervalf|weekendf,data=d_clean4,type="l")
+```
+
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
