@@ -120,15 +120,15 @@ head(d_clean2)
 str(d_clean2)
 
 # use reshape lib to calculate the grouped average
-install.packages("reshape")
+#install.packages("reshape")
 library(reshape)
-d_clean3 <- cast(melt(d_clean2,id=c("weekendfactor","interval")),weekendfactor~interval,mean)
+d_clean4 <- cast(melt(d_clean2,id=c("weekendfactor","interval")),weekendfactor~interval,mean)
 dim(d_clean3)
 head(d_clean3)
 d_clean4 <-data.frame(weekendf=as.factor(c(rep("weekday",288),rep("weekend",288))),
-                     intervalf=as.factor(seq(0,2355,by=5),2),
-                     steps=d_clean3)
+                     intervalf=rep(names(step_per_interval),2),
+                     steps=as.numeric(cbind(d_clean3[1,2:289],d_clean3[2,2:289])))
 head(d_clean4)
-xyplot(steps ~ interval|weekendfactor,data=d_clean3)
+xyplot(steps ~ intervalf|weekendf,data=d_clean4)
 ```
 
